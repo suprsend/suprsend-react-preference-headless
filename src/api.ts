@@ -197,7 +197,7 @@ export default class PreferencesApi {
   }
 
   _get_auth_token(config) {
-    const header_prefix = 'SS-JWT';
+    const header_prefix = 'SS_JWT';
     return `${header_prefix} ${config.workspace_key}:${config.user_token}`;
   }
 
