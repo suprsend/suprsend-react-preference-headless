@@ -13,21 +13,28 @@ import {
 const handleCategoryPreferenceChange = (
   data: boolean,
   subcategory: ICategory,
-  update_category_preference: IUseUpdatePreferences['update_category_preference']
+  update_category_preference: IUseUpdatePreferences['update_category_preference'],
+  setuserToken: (val: string) => void
 ) => {
   const resp = update_category_preference?.(
     subcategory.category,
     data ? PreferenceOptions.OPT_IN : PreferenceOptions.OPT_OUT
   );
   if (resp?.error) {
-    console.log(resp.message);
+    if (resp.response.type === 'TOKEN_EXPIRED') {
+      // refresh token api call
+      // setuserToken('<new jwt token>');
+    } else {
+      console.log(resp.response.message);
+    }
   }
 };
 
 const handleChannelPreferenceInCategoryChange = (
   channel: ICategoryChannel,
   subcategory: ICategory,
-  update_channel_preference_in_category: IUseUpdatePreferences['update_channel_preference_in_category']
+  update_channel_preference_in_category: IUseUpdatePreferences['update_channel_preference_in_category'],
+  setuserToken: (val: string) => void
 ) => {
   if (!channel.is_editable) return;
 
@@ -39,16 +46,23 @@ const handleChannelPreferenceInCategoryChange = (
     subcategory.category
   );
   if (resp?.error) {
-    console.log(resp.message);
+    if (resp.response.type === 'TOKEN_EXPIRED') {
+      // refresh token api call
+      // setuserToken('<new jwt token>');
+    } else {
+      console.log(resp.response.message);
+    }
   }
 };
 
 interface INotificationCategoryPreferencesProps {
   preferenceData?: IPreferenceState | null;
+  setuserToken: (val: string) => void;
 }
 
 export default function NotificationCategoryPreferences({
   preferenceData,
+  setuserToken,
 }: INotificationCategoryPreferencesProps) {
   const {
     update_category_preference,
@@ -124,7 +138,8 @@ export default function NotificationCategoryPreferences({
                           handleCategoryPreferenceChange(
                             data,
                             subcategory,
-                            update_category_preference
+                            update_category_preference,
+                            setuserToken
                           );
                         }}
                         uncheckedIcon={false}
@@ -153,7 +168,8 @@ export default function NotificationCategoryPreferences({
                             handleChannelPreferenceInCategoryChange(
                               channel,
                               subcategory,
-                              update_channel_preference_in_category
+                              update_channel_preference_in_category,
+                              setuserToken
                             );
                           }}
                         />

@@ -32,12 +32,16 @@ export interface IPreferenceState {
   channel_preferences: IChannelPreference[] | null;
 }
 
+export interface IErrorResponse {
+  type?: string;
+  message?: string;
+}
+
 export interface IPreferenceErrorData {
   error: boolean;
-  api_error?: boolean;
-  message: string | null;
+  is_api_error?: boolean;
   status_code?: number | null;
-  error_obj?: Error | null;
+  response: IErrorResponse;
 }
 
 export interface IPreferencesResponse {

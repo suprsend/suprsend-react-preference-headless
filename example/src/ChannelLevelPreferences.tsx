@@ -4,14 +4,29 @@ import {
   ChannelLevelPreferenceOptions,
   IPreferenceState,
   IChannelPreference,
+  IPreferenceErrorData,
 } from '../../';
+
+const handleError = (
+  error: IPreferenceErrorData,
+  setuserToken: (val: string) => void
+) => {
+  if (error.response.type === 'TOKEN_EXPIRED') {
+    // refresh token api call
+    // setuserToken('<new jwt token>');
+  } else {
+    console.log(error.response.message);
+  }
+};
 
 interface IChannelLevelPreferernceItemProps {
   channel: IChannelPreference;
+  setuserToken: (val: string) => void;
 }
 
 function ChannelLevelPreferernceItem({
   channel,
+  setuserToken,
 }: IChannelLevelPreferernceItemProps) {
   const [isActive, setIsActive] = React.useState(false);
   const { update_overall_channel_preference } = useUpdatePreferences();
@@ -80,7 +95,7 @@ function ChannelLevelPreferernceItem({
                         ChannelLevelPreferenceOptions.ALL
                       );
                       if (resp?.error) {
-                        console.log(resp.message);
+                        handleError(resp, setuserToken);
                       }
                     }}
                   />
@@ -111,7 +126,7 @@ function ChannelLevelPreferernceItem({
                         ChannelLevelPreferenceOptions.REQUIRED
                       );
                       if (resp?.error) {
-                        console.log(resp.message);
+                        handleError(resp, setuserToken);
                       }
                     }}
                   />
@@ -137,10 +152,12 @@ function ChannelLevelPreferernceItem({
 
 interface IChannelLevelPreferencesProps {
   preferenceData?: IPreferenceState | null;
+  setuserToken: (val: string) => void;
 }
 
 export default function ChannelLevelPreferences({
   preferenceData,
+  setuserToken,
 }: IChannelLevelPreferencesProps) {
   return (
     <div>
@@ -168,7 +185,11 @@ export default function ChannelLevelPreferences({
             {preferenceData.channel_preferences?.map(
               (channel, index: number) => {
                 return (
-                  <ChannelLevelPreferernceItem key={index} channel={channel} />
+                  <ChannelLevelPreferernceItem
+                    key={index}
+                    channel={channel}
+                    setuserToken={setuserToken}
+                  />
                 );
               }
             )}

@@ -81,7 +81,7 @@ export default class PreferencesApi {
         error: true,
         is_api_error: false,
         status_code: null,
-        response: { message: e?.message, type: e.name },
+        response: { message: e?.message, type: e?.name },
       };
     }
   }
@@ -119,14 +119,14 @@ export default class PreferencesApi {
         error: true,
         is_api_error: true,
         status_code: resp.status,
-        message: { message: error_data?.message, type: error_data?.type },
+        response: { message: error_data?.message, type: error_data?.type },
       };
     } catch (e) {
       return {
         error: true,
         api_error: false,
         status_code: null,
-        response: { message: e.message, type: e.name },
+        response: { message: e?.message, type: e?.name },
       };
     }
   }
@@ -178,17 +178,20 @@ export default class PreferencesApi {
     if (!config.distinct_id) {
       return {
         error: true,
-        message: 'distinct_id missing',
+        response: { message: 'distinct_id missing', type: 'VALIDATION_ERROR' },
       };
     } else if (!config.user_token) {
       return {
         error: true,
-        message: 'user_token missing',
+        response: { message: 'user_token missing', type: 'VALIDATION_ERROR' },
       };
     } else if (!config.workspace_key) {
       return {
         error: true,
-        message: 'workspace_key missing',
+        response: {
+          message: 'workspace_key missing',
+          type: 'VALIDATION_ERROR',
+        },
       };
     }
   }
@@ -226,16 +229,22 @@ export default class PreferencesApi {
     ) {
       return {
         error: true,
-        message: !category
-          ? 'Category parameter is missing'
-          : 'Preference parameter is invalid',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: !category
+            ? 'Category parameter is missing'
+            : 'Preference parameter is invalid',
+        },
       };
     }
 
     if (!this.data) {
       return {
         error: true,
-        message: 'Call get_preferences method before performing action',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: 'Call get_preferences method before performing action',
+        },
       };
     }
 
@@ -245,11 +254,14 @@ export default class PreferencesApi {
     if (error) return error;
 
     const jwt_payload = decode_jwt(config.user_token);
-    const has_expired = Date.now() >= jwt_payload.exp * 1000;
+    const has_expired = Date.now() >= (jwt_payload.exp - 3) * 1000;
     if (has_expired) {
       return {
         error: true,
-        message: 'JWT token expired',
+        response: {
+          type: 'TOKEN_EXPIRED',
+          message: 'Token is expired',
+        },
       };
     }
 
@@ -274,7 +286,10 @@ export default class PreferencesApi {
           } else {
             return {
               error: true,
-              message: 'Category preference is not editable',
+              response: {
+                type: 'VALIDATION_ERROR',
+                message: 'Category preference is not editable',
+              },
             };
           }
         }
@@ -285,7 +300,10 @@ export default class PreferencesApi {
     if (!category_data) {
       return {
         error: true,
-        message: 'Category is not found',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: 'Category is not found',
+        },
       };
     }
 
@@ -325,9 +343,12 @@ export default class PreferencesApi {
     if (!channel || !category) {
       return {
         error: true,
-        message: !channel
-          ? 'Channel parameter is missing'
-          : 'Category parameter is missing',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: !channel
+            ? 'Channel parameter is missing'
+            : 'Category parameter is missing',
+        },
       };
     } else if (
       ![PreferenceOptions.OPT_IN, PreferenceOptions.OPT_OUT].includes(
@@ -336,14 +357,20 @@ export default class PreferencesApi {
     ) {
       return {
         error: true,
-        message: 'Preference parameter is invalid',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: 'Preference parameter is invalid',
+        },
       };
     }
 
     if (!this.data) {
       return {
         error: true,
-        message: 'Call get_preferences method before performing action',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: 'Call get_preferences method before performing action',
+        },
       };
     }
 
@@ -353,11 +380,14 @@ export default class PreferencesApi {
     if (error) return error;
 
     const jwt_payload = decode_jwt(config.user_token);
-    const has_expired = Date.now() >= jwt_payload.exp * 1000;
+    const has_expired = Date.now() >= (jwt_payload.exp - 3) * 1000;
     if (has_expired) {
       return {
         error: true,
-        message: 'JWT token expired',
+        response: {
+          type: 'TOKEN_EXPIRED',
+          message: 'Token is expired',
+        },
       };
     }
 
@@ -389,7 +419,10 @@ export default class PreferencesApi {
               } else {
                 return {
                   error: true,
-                  message: 'Channel preference is not editable',
+                  response: {
+                    message: 'Channel preference is not editable',
+                    type: 'VALIDATION_ERROR',
+                  },
                 };
               }
             }
@@ -403,14 +436,20 @@ export default class PreferencesApi {
     if (!category_data) {
       return {
         error: true,
-        message: 'Category not found',
+        response: {
+          message: 'Category not found',
+          type: 'VALIDATION_ERROR',
+        },
       };
     }
 
     if (!selected_channel_data) {
       return {
         error: true,
-        message: "Category's Channel not found",
+        response: {
+          message: "Category's Channel not found",
+          type: 'VALIDATION_ERROR',
+        },
       };
     }
 
@@ -455,16 +494,22 @@ export default class PreferencesApi {
     ) {
       return {
         error: true,
-        message: !channel
-          ? 'Channel parameter is missing'
-          : 'Preference parameter is invalid',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: !channel
+            ? 'Channel parameter is missing'
+            : 'Preference parameter is invalid',
+        },
       };
     }
 
     if (!this.data) {
       return {
         error: true,
-        message: 'Call get_preferences method before performing action',
+        response: {
+          type: 'VALIDATION_ERROR',
+          message: 'Call get_preferences method before performing action',
+        },
       };
     }
 
@@ -474,11 +519,14 @@ export default class PreferencesApi {
     if (error) return error;
 
     const jwt_payload = decode_jwt(config.user_token);
-    const has_expired = Date.now() >= jwt_payload.exp * 1000;
+    const has_expired = Date.now() >= (jwt_payload.exp - 3) * 1000;
     if (has_expired) {
       return {
         error: true,
-        message: 'JWT token expired',
+        response: {
+          type: 'TOKEN_EXPIRED',
+          message: 'Token is expired',
+        },
       };
     }
 
@@ -501,7 +549,10 @@ export default class PreferencesApi {
     if (!channel_data) {
       return {
         error: true,
-        message: 'Channel data not found',
+        response: {
+          message: 'Channel data not found',
+          type: 'VALIDATION_ERROR',
+        },
       };
     }
 
