@@ -1,11 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Thing } from '../.';
+import SuprSendPreferenceProvider from '../dist';
 
 const App = () => {
   return (
     <div>
-      <Thing />
+      <SuprSendPreferenceProvider distinct_id="mike" user_token="testing">
+        <p>Hello world</p>
+      </SuprSendPreferenceProvider>
     </div>
   );
 };

@@ -1,6 +1,8 @@
-import * as React from 'react';
-
-// Delete me
-export const Thing = () => {
-  return <div>the snozzberries taste like snozzberries</div>;
-};
+export { default as SuprSendPreferenceProvider } from './Provider';
+export {
+  usePreferences,
+  useUpdatePreferences,
+  usePreferenceEvent,
+} from './hooks';
+export { PreferenceOptions, ChannelLevelPreferenceOptions } from './api';
+export * from './types';
