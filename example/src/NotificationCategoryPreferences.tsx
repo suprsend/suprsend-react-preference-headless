@@ -9,6 +9,7 @@ import {
   useUpdatePreferences,
   ICategoryChannel,
 } from '../../';
+import { handleError } from '../';
 
 const handleCategoryPreferenceChange = (
   data: boolean,
@@ -21,12 +22,7 @@ const handleCategoryPreferenceChange = (
     data ? PreferenceOptions.OPT_IN : PreferenceOptions.OPT_OUT
   );
   if (resp?.error) {
-    if (resp.response.type === 'TOKEN_EXPIRED') {
-      // refresh token api call
-      // setuserToken('<new jwt token>');
-    } else {
-      console.log(resp.response.message);
-    }
+    handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
   }
 };
 
@@ -46,12 +42,7 @@ const handleChannelPreferenceInCategoryChange = (
     subcategory.category
   );
   if (resp?.error) {
-    if (resp.response.type === 'TOKEN_EXPIRED') {
-      // refresh token api call
-      // setuserToken('<new jwt token>');
-    } else {
-      console.log(resp.response.message);
-    }
+    handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
   }
 };
 

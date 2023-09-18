@@ -4,20 +4,8 @@ import {
   ChannelLevelPreferenceOptions,
   IPreferenceState,
   IChannelPreference,
-  IPreferenceErrorData,
 } from '../../';
-
-const handleError = (
-  error: IPreferenceErrorData,
-  setuserToken: (val: string) => void
-) => {
-  if (error.response.type === 'TOKEN_EXPIRED') {
-    // refresh token api call
-    // setuserToken('<new jwt token>');
-  } else {
-    console.log(error.response.message);
-  }
-};
+import { handleError } from '../';
 
 interface IChannelLevelPreferernceItemProps {
   channel: IChannelPreference;
@@ -95,7 +83,7 @@ function ChannelLevelPreferernceItem({
                         ChannelLevelPreferenceOptions.ALL
                       );
                       if (resp?.error) {
-                        handleError(resp, setuserToken);
+                        handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
                       }
                     }}
                   />
@@ -126,7 +114,7 @@ function ChannelLevelPreferernceItem({
                         ChannelLevelPreferenceOptions.REQUIRED
                       );
                       if (resp?.error) {
-                        handleError(resp, setuserToken);
+                        handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
                       }
                     }}
                   />
