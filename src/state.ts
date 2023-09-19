@@ -6,7 +6,7 @@ export const useConfigStore = create<IConfigStore>()(() => ({
   distinct_id: null,
   user_token: null,
   tenant_id: 'default',
-  api_url: 'https://collector-staging.suprsend.workers.dev',
+  api_url: 'https://hub.suprsend.com',
   preference_debounce: 1000,
 }));
 
