@@ -20,7 +20,7 @@ import { SuprSendPreferenceProvider } from '@suprsend/react-preferences-headless
 function Example() {
   return (
     <SuprSendPreferenceProvider
-      workspace_Key="<workspace_key>"
+      workspaceKey="<workspace_key>"
       distinctID="<distinct_id>"
       accessToken="<access_token>"
     >
