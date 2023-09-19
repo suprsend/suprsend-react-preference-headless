@@ -2,7 +2,7 @@
 
 This SDK is used to integrate preferences functionality in React, React Native Applications
 
-Refer full documentation [here](https://docs.suprsend.com/docs/node)
+Refer full documentation [here](https://docs.suprsend.com/docs/react-headless)
 
 Example implementation is available [here](https://github.com/suprsend/suprsend-react-preference-headless/tree/main/example)
 
