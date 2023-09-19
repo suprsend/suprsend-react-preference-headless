@@ -15,9 +15,9 @@ function App() {
   return (
     <div>
       <SuprSendPreferenceProvider
-        distinct_id={distinct_id}
-        access_token={user_token}
-        workspace_key="workspace_key"
+        distinctID={distinct_id}
+        accessToken={user_token}
+        workspaceKey="workspace_key"
       >
         <Preference setuserToken={setuserToken} />
       </SuprSendPreferenceProvider>
