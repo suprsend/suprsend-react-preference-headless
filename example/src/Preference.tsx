@@ -1,18 +1,18 @@
 import * as React from 'react';
+import ChannelLevelPreferences from './ChannelLevelPreferences';
+import NotificationCategoryPreferences from './NotificationCategoryPreferences';
 import {
   usePreferences,
   usePreferenceEvent,
   IPreferenceErrorData,
-} from '../../';
-import ChannelLevelPreferences from './ChannelLevelPreferences';
-import NotificationCategoryPreferences from './NotificationCategoryPreferences';
+} from '@suprsend/react-preferences-headless';
 
 export function handleError(
   error: IPreferenceErrorData,
   setuserToken: (val: string) => void
 ) {
   if (error.response.type === 'TOKEN_EXPIRED') {
-    // refresh token api call
+    // refresh jwt access token api call
     // setuserToken('<new jwt token>');
   } else {
     console.log(error.response.message); // show to user using toast
