@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Switch from 'react-switch';
 import Checkbox from './CheckBox';
+import { handleError } from './Preference';
 import {
   IPreferenceState,
   PreferenceOptions,
   useUpdatePreferences,
-} from '../../';
-import { handleError } from './Preference';
+} from '@suprsend/react-preferences-headless';
 
 interface INotificationCategoryPreferencesProps {
   preferenceData?: IPreferenceState | null;

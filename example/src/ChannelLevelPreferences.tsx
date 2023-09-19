@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { handleError } from './Preference';
 import {
   useUpdatePreferences,
   ChannelLevelPreferenceOptions,
   IPreferenceState,
   IChannelPreference,
-} from '../../';
-import { handleError } from './Preference';
+} from '@suprsend/react-preferences-headless';
 
 interface IChannelLevelPreferernceItemProps {
   channel: IChannelPreference;
