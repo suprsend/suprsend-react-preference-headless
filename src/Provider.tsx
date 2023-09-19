@@ -4,25 +4,25 @@ import PreferencesApi from './api';
 import { IProviderProps } from './types';
 
 function SuprSendPreferenceProvider({
-  workspace_key,
-  distinct_id,
-  access_token,
-  tenant_id,
+  workspaceKey,
+  distinctID,
+  accessToken,
+  tenantID,
   children,
 }: IProviderProps) {
   useEffect(() => {
     useConfigStore.setState(() => ({
-      workspace_key,
-      distinct_id,
-      user_token: access_token,
-      tenant_id: tenant_id || 'default',
+      workspace_key: workspaceKey,
+      distinct_id: distinctID,
+      user_token: accessToken,
+      tenant_id: tenantID || 'default',
     }));
 
     const preferenceData = usePreferenceStore.getState();
     if (
-      distinct_id &&
-      access_token &&
-      workspace_key &&
+      distinctID &&
+      accessToken &&
+      workspaceKey &&
       !preferenceData.preferenceInstance
     ) {
       const preference = new PreferencesApi();
@@ -30,7 +30,7 @@ function SuprSendPreferenceProvider({
         preferenceInstance: preference,
       }));
     }
-  }, [distinct_id, access_token, tenant_id, workspace_key]);
+  }, [distinctID, accessToken, tenantID, workspaceKey]);
 
   return <Fragment>{children}</Fragment>;
 }

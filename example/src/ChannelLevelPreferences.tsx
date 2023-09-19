@@ -5,7 +5,7 @@ import {
   IPreferenceState,
   IChannelPreference,
 } from '../../';
-import { handleError } from '../';
+import { handleError } from './Preference';
 
 interface IChannelLevelPreferernceItemProps {
   channel: IChannelPreference;

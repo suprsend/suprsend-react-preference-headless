@@ -56,10 +56,10 @@ export interface IPreferenceAPIReponse
     IPreferenceErrorData {}
 
 export interface IProviderProps {
-  workspace_key: string;
-  distinct_id: string | null;
-  access_token: string | null;
-  tenant_id?: string;
+  workspaceKey: string;
+  distinctID: string | null;
+  accessToken: string | null;
+  tenantID?: string;
   children: React.ReactElement | React.ReactElement[];
 }
 

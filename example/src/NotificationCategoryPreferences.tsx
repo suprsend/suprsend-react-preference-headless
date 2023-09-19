@@ -2,49 +2,11 @@ import * as React from 'react';
 import Switch from 'react-switch';
 import Checkbox from './CheckBox';
 import {
-  ICategory,
   IPreferenceState,
-  IUseUpdatePreferences,
   PreferenceOptions,
   useUpdatePreferences,
-  ICategoryChannel,
 } from '../../';
-import { handleError } from '../';
-
-const handleCategoryPreferenceChange = (
-  data: boolean,
-  subcategory: ICategory,
-  update_category_preference: IUseUpdatePreferences['update_category_preference'],
-  setuserToken: (val: string) => void
-) => {
-  const resp = update_category_preference?.(
-    subcategory.category,
-    data ? PreferenceOptions.OPT_IN : PreferenceOptions.OPT_OUT
-  );
-  if (resp?.error) {
-    handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
-  }
-};
-
-const handleChannelPreferenceInCategoryChange = (
-  channel: ICategoryChannel,
-  subcategory: ICategory,
-  update_channel_preference_in_category: IUseUpdatePreferences['update_channel_preference_in_category'],
-  setuserToken: (val: string) => void
-) => {
-  if (!channel.is_editable) return;
-
-  const resp = update_channel_preference_in_category?.(
-    channel.channel,
-    channel.preference === PreferenceOptions.OPT_IN
-      ? PreferenceOptions.OPT_OUT
-      : PreferenceOptions.OPT_IN,
-    subcategory.category
-  );
-  if (resp?.error) {
-    handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
-  }
-};
+import { handleError } from './Preference';
 
 interface INotificationCategoryPreferencesProps {
   preferenceData?: IPreferenceState | null;
@@ -63,7 +25,6 @@ export default function NotificationCategoryPreferences({
   if (!preferenceData?.sections) {
     return <p>No Data</p>;
   }
-
   return (
     <div>
       {preferenceData.sections?.map((section, index) => {
@@ -126,12 +87,17 @@ export default function NotificationCategoryPreferences({
                       <Switch
                         disabled={!subcategory.is_editable}
                         onChange={data => {
-                          handleCategoryPreferenceChange(
-                            data,
-                            subcategory,
-                            update_category_preference,
-                            setuserToken
+                          const preference = data
+                            ? PreferenceOptions.OPT_IN
+                            : PreferenceOptions.OPT_OUT;
+
+                          const resp = update_category_preference?.(
+                            subcategory.category,
+                            preference
                           );
+                          if (resp?.error) {
+                            handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
+                          }
                         }}
                         uncheckedIcon={false}
                         checkedIcon={false}
@@ -156,12 +122,19 @@ export default function NotificationCategoryPreferences({
                           title={channel.channel}
                           disabled={!channel.is_editable}
                           onClick={() => {
-                            handleChannelPreferenceInCategoryChange(
-                              channel,
-                              subcategory,
-                              update_channel_preference_in_category,
-                              setuserToken
+                            if (!channel.is_editable) return;
+                            const preference =
+                              channel.preference === PreferenceOptions.OPT_IN
+                                ? PreferenceOptions.OPT_OUT
+                                : PreferenceOptions.OPT_IN;
+                            const resp = update_channel_preference_in_category?.(
+                              channel.channel,
+                              preference,
+                              subcategory.category
                             );
+                            if (resp?.error) {
+                              handleError(resp, setuserToken); // synchronous client side errors thrown by sdk will be handled here
+                            }
                           }}
                         />
                       );
